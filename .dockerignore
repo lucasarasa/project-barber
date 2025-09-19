@@ -1,0 +1,25 @@
+# Node modules e caches
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+.pnpm-debug.log
+
+# Diretórios de build
+.next
+out
+dist
+
+# Logs
+*.log
+
+# Configurações de IDE/editor
+.DS_Store
+.idea
+.vscode
+*.swp
+*.swo
+
+# Git (não precisa no container)
+.git
+.gitignore
