@@ -3,7 +3,6 @@ import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
 import { Input } from "./_components/ui/input"
 import Image from "next/image"
-import { Card, CardContent } from "./_components/ui/card"
 import { db } from "./_lib/prisma"
 import BarberShopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
@@ -80,16 +79,6 @@ const Home = async () => {
           ))}
         </div>
       </div>
-
-      <footer>
-        <Card className="rounded-none border-x-0 border-y-0 border-t p-0">
-          <CardContent className="px-5 py-6">
-            <p className="text-sm text-gray-400">
-              © 2025 Copyright <span className="font-bold">FSW Barber</span>
-            </p>
-          </CardContent>
-        </Card>
-      </footer>
     </div>
   )
 }
