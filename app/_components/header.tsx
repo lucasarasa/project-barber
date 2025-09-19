@@ -7,7 +7,7 @@ import { MenuIcon } from "lucide-react"
 const Header = () => {
   return (
     <div>
-      <Card>
+      <Card className="rounded-none border-x-0 border-y-0 border-b p-0">
         <CardContent className="flex flex-row items-center justify-between p-4">
           <Image alt="FSW Barber" src="/logo.png" height={18} width={120} />
           <Button size="icon" variant="outline">
