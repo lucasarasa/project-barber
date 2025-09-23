@@ -9,7 +9,7 @@ const BannerCarousel = () => {
     <Carousel
       plugins={[
         Autoplay({
-          delay: 3000,
+          delay: 5000,
           stopOnInteraction: false,
         }),
       ]}
@@ -23,14 +23,14 @@ const BannerCarousel = () => {
         </CarouselItem>
         <CarouselItem>
           <BannerCarouselItem
-            src="/banner-01.png"
-            alt="Agende nos melhores com FSW Barber"
+            src="/banner-02.jpg"
+            alt="Barbershop Haircut & Shave"
           />
         </CarouselItem>
         <CarouselItem>
           <BannerCarouselItem
-            src="/banner-01.png"
-            alt="Agende nos melhores com FSW Barber"
+            src="/banner-03.jpg"
+            alt="Barbershop Premium Quality"
           />
         </CarouselItem>
       </CarouselContent>
