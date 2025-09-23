@@ -1,5 +1,5 @@
 import PhoneItem from "@/app/_components/phone-item"
-import ServiceItem from "@/app/_components/service.item"
+import ServiceItem from "@/app/_components/service-item"
 import SiderbarSheets from "@/app/_components/sidebar-sheets"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
@@ -92,7 +92,11 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <h2 className="text-xs font-bold uppercase text-gray-400">Serviços</h2>
         <div className="space-y-3">
           {barbershop.services.map((service) => (
-            <ServiceItem key={service.id} service={service} />
+            <ServiceItem
+              key={service.id}
+              barbershop={barbershop}
+              service={service}
+            />
           ))}
         </div>
       </div>
