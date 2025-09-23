@@ -8,15 +8,37 @@ import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
 import BannerCarousel from "./_components/banner-carousel"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
 
 // SERVER COMPONENTS
 const Home = async () => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
+
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session?.user as any).id,
+          date: {
+            gte: new Date(), // greater than or equal to que serve para pegar datas futuras
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: { date: "asc" },
+      })
+    : []
 
   return (
     <div>
@@ -25,12 +47,10 @@ const Home = async () => {
         {/* texto */}
         <h2 className="text-xl font-bold">Olá, Lucas</h2>
         <p>Quinta-feira, 18 de setembro.</p>
-
         {/* busca */}
         <div className="mb-8 mt-6">
           <Search />
         </div>
-
         {/* busca rápida */}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
@@ -52,13 +72,18 @@ const Home = async () => {
             </Button>
           ))}
         </div>
-
         {/* Banner */}
         <BannerCarousel />
-
         {/* agendamento */}
-        <BookingItem />
-
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+        <div className="flex gap-3 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((booking) => (
+            <BookingItem key={booking.id} booking={booking} />
+          ))}
+        </div>
+        {/* Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
@@ -67,7 +92,6 @@ const Home = async () => {
             <BarberShopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
-
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Populares
         </h2>
