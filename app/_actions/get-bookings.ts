@@ -15,8 +15,8 @@ export const getBookings = ({ date }: GetBookingProps) => {
   return db.booking.findMany({
     where: {
       date: {
-        lte: endOfDay(date),
-        gte: startOfDay(date),
+        lte: endOfDay(date), // less than or equal que é menor ou igual,
+        gte: startOfDay(date), // greater than or equal que é maior ou igual, usados para pegar todos os agendamentos do dia
       },
     },
   })

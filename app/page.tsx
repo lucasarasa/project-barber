@@ -7,6 +7,7 @@ import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
+import BannerCarousel from "./_components/banner-carousel"
 
 // SERVER COMPONENTS
 const Home = async () => {
@@ -52,15 +53,8 @@ const Home = async () => {
           ))}
         </div>
 
-        {/* imagem */}
-        <div className="relative mt-6 h-[150px] w-full">
-          <Image
-            alt="Agende nos melhores com FSW Barber"
-            src="/banner-01.png"
-            fill
-            className="rounded-xl object-cover"
-          />
-        </div>
+        {/* Banner */}
+        <BannerCarousel />
 
         {/* agendamento */}
         <BookingItem />
