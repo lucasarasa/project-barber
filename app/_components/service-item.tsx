@@ -13,8 +13,8 @@ import {
 } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { useEffect, useState } from "react"
-import { format, set } from "date-fns"
+import { useEffect, useMemo, useState } from "react"
+import { format, isPast, isToday, set } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
@@ -51,10 +51,21 @@ const TIME_LIST = [
   "18:00",
 ]
 
-const getTimeList = (bookings: Booking[]) => {
+interface GetTimeListProps {
+  bookings: Booking[]
+  selectedDay: Date
+}
+
+const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
     const minutes = Number(time.split(":")[1])
+
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
+    if (timeIsOnThePast && isToday(selectedDay)) {
+      return false
+    }
+
     // verifica se tem algum agendamento no mesmo horário
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
@@ -134,6 +145,14 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     }
   }
 
+  const timeList = useMemo(() => {
+    if (!selectedDay) return []
+    return getTimeList({
+      bookings: dayBookings,
+      selectedDay,
+    })
+  }, [dayBookings, selectedDay])
+
   return (
     <>
       <Card className="p-0">
@@ -172,7 +191,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 </Button>
 
                 <SheetContent className="px-0">
-                  <SheetHeader>
+                  <SheetHeader className="w-full items-center">
                     <SheetTitle>Fazer reserva</SheetTitle>
                   </SheetHeader>
                   <div className="border-b border-solid py-5">
@@ -198,18 +217,24 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
                   {selectedDay && (
                     <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-                      {getTimeList(dayBookings).map((time) => (
-                        <Button
-                          key={time}
-                          variant={
-                            selectedTime === time ? "default" : "outline"
-                          }
-                          className="rounded-full"
-                          onClick={() => handleTimeSelected(time)}
-                        >
-                          {time}
-                        </Button>
-                      ))}
+                      {timeList.length > 0 ? (
+                        timeList.map((time) => (
+                          <Button
+                            key={time}
+                            variant={
+                              selectedTime === time ? "default" : "outline"
+                            }
+                            className="rounded-full"
+                            onClick={() => handleTimeSelected(time)}
+                          >
+                            {time}
+                          </Button>
+                        ))
+                      ) : (
+                        <p className="w-full text-center text-xs">
+                          Não há mais horários disponíveis para este dia.
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -250,11 +275,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       </Card>
                     </div>
                   )}
-                  <SheetFooter className="mt-5 px-5">
+                  <SheetFooter className="mt-5 px-5 sm:justify-center">
                     <Button
                       variant="default"
                       onClick={handleCreateBooking}
                       disabled={!selectedDay || !selectedTime}
+                      className="w-full"
                     >
                       Confirmar
                     </Button>
