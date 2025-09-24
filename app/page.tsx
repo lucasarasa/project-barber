@@ -10,6 +10,8 @@ import Link from "next/link"
 import BannerCarousel from "./_components/banner-carousel"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 // SERVER COMPONENTS
 const Home = async () => {
@@ -45,8 +47,18 @@ const Home = async () => {
       <Header />
       <div className="p-5">
         {/* texto */}
-        <h2 className="text-xl font-bold">Olá, Lucas</h2>
-        <p>Quinta-feira, 18 de setembro.</p>
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name : "bem vindo!"}
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd", { locale: ptBR })}
+          </span>
+          <span>&nbsp;de&nbsp;</span>
+          <span className="capitalize">
+            {format(new Date(), "MMMM", { locale: ptBR })}
+          </span>
+        </p>
         {/* busca */}
         <div className="mb-8 mt-6">
           <Search />
