@@ -7,7 +7,6 @@ import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
 import Search from "./_components/search"
 import Link from "next/link"
-import BannerCarousel from "./_components/banner-carousel"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
 import { format } from "date-fns"
@@ -85,16 +84,29 @@ const Home = async () => {
           ))}
         </div>
         {/* Banner */}
-        <BannerCarousel />
-        {/* agendamento */}
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
-        <div className="flex gap-3 overflow-auto [&::-webkit-scrollbar]:hidden">
-          {confirmedBookings.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
+        <div className="relative mt-6 h-[150px] w-full">
+          <Image
+            alt="Agende nos melhores com FSW Barber"
+            src="/banner-01.png"
+            fill
+            className="rounded-xl object-cover"
+          />
         </div>
+
+        {/* agendamento */}
+        {confirmedBookings.length > 0 && (
+          <>
+            <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+              Agendamentos
+            </h2>
+            <div className="flex gap-3 overflow-auto [&::-webkit-scrollbar]:hidden">
+              {confirmedBookings.map((booking) => (
+                <BookingItem key={booking.id} booking={booking} />
+              ))}
+            </div>
+          </>
+        )}
+
         {/* Recomendados */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
