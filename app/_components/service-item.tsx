@@ -56,11 +56,13 @@ interface GetTimeListProps {
   selectedDay: Date
 }
 
+// função que retorna os horários disponíveis
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
     const minutes = Number(time.split(":")[1])
 
+    // verifica se o horário já passou, se for o dia atual bloqueia os horários anteriores
     const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
     if (timeIsOnThePast && isToday(selectedDay)) {
       return false
